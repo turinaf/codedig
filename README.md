@@ -1,4 +1,4 @@
-# codedig
+# CodeDig
  A semantic code search engine <br>
  This is <strong>WebIR course Project</strong>
 
