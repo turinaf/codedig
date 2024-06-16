@@ -2,3 +2,4 @@ zhipuai
 flask
 beatifulsoup
 requests
+whoosh
