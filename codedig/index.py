@@ -12,9 +12,9 @@ from zhipuai import ZhipuAI
 from codedig.glm_api import CHATCHLM_API_KEY
 client = ZhipuAI(api_key=CHATCHLM_API_KEY) 
 
-if not os.path.exists("../indexdir"):
-    os.makedirs("../indexdir")
-storage = FileStorage("../indexdir")
+if not os.path.exists("indexdir"):
+    os.makedirs("indexdir")
+storage = FileStorage("indexdir")
 
 def index_code(folder_path):
     schema = fields.Schema(
@@ -24,7 +24,7 @@ def index_code(folder_path):
         startline=fields.NUMERIC(numtype=int, stored=True),
         language=fields.TEXT(stored=True)  
     )
-    storage = FileStorage("../indexdir")
+    storage = FileStorage("indexdir")
     ix = storage.create_index(schema, indexname="codeindex")
     writer = ix.writer()
     counter = 0
@@ -62,9 +62,10 @@ def index_code(folder_path):
                                             language=language,
                                             )
                         time.sleep(1)
-                    print("file_name: ", file_name)
-                    with open(f"../annotated_code/{counter}_{file_name}.json", "w") as f:
-                        json.dump(annotated_content, f, indent=4)
+                    print("Indexed content of: ", file_name)
+                    # save incase a problem occurs
+                    # with open(f"annotated_code/{counter}_{file_name}.json", "w") as f:
+                    #     json.dump(annotated_content, f, indent=4)
                         
             except UnicodeDecodeError:
                     continue
@@ -123,5 +124,5 @@ def index_docs(folder_path):
     print(f"Indexed {counter} documents")
 
 if __name__ == "__main__":
-    index_code("../base/code")
-    # index_docs("../base/documentation")  
+    index_code("path/to/codebase")
+    index_docs("path/to/docs") 

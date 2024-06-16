@@ -43,7 +43,7 @@ def code_search(mode, query_text, selected_language):
     for hit in results:
         result = {}
         filepath = hit["filename"]
-        filepath = filepath.lstrip("../")
+        # filepath = filepath.lstrip("../")
         linenumber = hit.get('startline')
         result['linenumber'] = list(range(linenumber, linenumber+10))
         result["filepath"] = filepath
@@ -55,7 +55,8 @@ def code_search(mode, query_text, selected_language):
             start_line = linenumber  #
             end_line = min(len(lines), linenumber + 10)  # Show 3 lines after the match
             code_snippet = "".join(lines[start_line:end_line])
-            result["filepath"] = filepath.lstrip("../base/code").replace("\\", "/")
+            # result["filepath"] = filepath.lstrip("../base/code").replace("\\", "/")
+            result["filepath"] = filepath
             result['content'] = code_snippet
             search_results.append(result)
 
@@ -100,17 +101,16 @@ def docs_search(mode, query_text):
         code=None
     )
 
-@bp.route("/index")
+@bp.route("/index", methods=["POST", "GET"])
 def index():
     if request.form.get("folderpath") is None:
         return render_template("index.html")
     folder_path = request.form.get("folderpath")
-    # index_code(folder_path)
+    index_code(folder_path)
     return render_template("index.html", message="Indexing completed.")
     
 def get_unique_languages(ix):
     with ix.reader() as reader:
-        # Use field_terms to get unique language terms
         unique_languages = set(reader.field_terms("language"))
         unique_languages =[lang.strip() for lang in unique_languages]
     return unique_languages

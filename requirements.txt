@@ -1,0 +1,4 @@
+zhipuai
+flask
+beatifulsoup
+requests
